@@ -73,9 +73,6 @@ void MainWindow::getCandleData()
 
     do {
         if(currTime > endTime) currTime = endTime;
-        if(startTime > endTime){
-            break;
-        }
         QString url = "https://fapi.binance.com/fapi/v1/klines?symbol=" + pair + "&interval=" + interval
                 + "&startTime=" + QString::number(startTime, 'f',0)
                 + "&endTime=" + QString::number(currTime, 'f',0);
@@ -95,6 +92,10 @@ void MainWindow::getCandleData()
         file.write(data);
         startTime = currTime + 1000*_intervalMap[interval];
         currTime = startTime + 999000*_intervalMap[interval];
+        if(startTime > endTime){
+            break;
+        }
+        else file.write(",");
     } while (true);
 
     file.write("]");
